@@ -28,18 +28,18 @@ type ConnectionSettings struct {
 	SSLMode  string `default:"disable"` // mode should be either require or disable
 }
 
-func NewPGPoolConn(connString string, s *PoolSettings) (*pgxpool.Pool, error) {
+func NewPGPoolConn(connString string, set *PoolSettings) (*pgxpool.Pool, error) {
 	ctx := context.Background()
 	poolCfg, err := pgxpool.ParseConfig(connString)
 	if err != nil {
 		return nil, fmt.Errorf("pgxpool.ParseConfig: %w", err)
 	}
 
-	poolCfg.MaxConns = s.ConnQuantityMax
-	poolCfg.MinConns = s.ConnQuantityMin
-	poolCfg.HealthCheckPeriod = time.Duration(s.HealthCheckPeriod)
-	poolCfg.MaxConnIdleTime = time.Duration(s.ConnTimeIdleMax)
-	poolCfg.MaxConnLifetime = time.Duration(s.ConnTimeLifetime)
+	poolCfg.MaxConns = set.ConnQuantityMax
+	poolCfg.MinConns = set.ConnQuantityMin
+	poolCfg.HealthCheckPeriod = time.Duration(set.HealthCheckPeriod)
+	poolCfg.MaxConnIdleTime = time.Duration(set.ConnTimeIdleMax)
+	poolCfg.MaxConnLifetime = time.Duration(set.ConnTimeLifetime)
 
 	connPool, err := pgxpool.NewWithConfig(ctx, poolCfg)
 	if err != nil {
