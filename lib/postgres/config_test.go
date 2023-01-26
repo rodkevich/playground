@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/rodkevich/playground/pkg/postgres"
+	"github.com/rodkevich/playground/lib/postgres"
 )
 
 func ExampleNewPGPoolConn() {
@@ -22,7 +22,8 @@ func ExampleNewPGPoolConn() {
 	sqlCreate := `create table "tbl1" (fld1 integer);`
 	sqlInsert := `insert into "tbl1" ("fld1") values (1), (2), (3);`
 	sqlSelect := `select fld1 from "tbl1";`
-	sqls := []string{sqlCreate, sqlInsert, sqlSelect, sqlDrop}
+
+	sqlQueries := []string{sqlCreate, sqlInsert, sqlSelect, sqlDrop}
 
 	options := pgx.TxOptions{
 		IsoLevel:       pgx.ReadCommitted,
@@ -33,7 +34,7 @@ func ExampleNewPGPoolConn() {
 	ctx := context.Background()
 	tx, err := conn.BeginTx(ctx, options)
 
-	for _, sql := range sqls {
+	for _, sql := range sqlQueries {
 		result, err := tx.Exec(ctx, sql)
 		if err != nil {
 			err := tx.Rollback(ctx)

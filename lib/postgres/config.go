@@ -10,6 +10,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+// PoolSettings for pgxpool
 type PoolSettings struct {
 	ConnQuantityMin   int32 `default:"10"`
 	ConnQuantityMax   int32 `default:"50"`
@@ -28,18 +29,19 @@ type ConnectionSettings struct {
 	SSLMode  string `default:"disable"` // mode should be either require or disable
 }
 
-func NewPGPoolConn(connString string, set *PoolSettings) (*pgxpool.Pool, error) {
+// NewPGPoolConn create new connection using pool
+func NewPGPoolConn(connString string, ps *PoolSettings) (*pgxpool.Pool, error) {
 	ctx := context.Background()
 	poolCfg, err := pgxpool.ParseConfig(connString)
 	if err != nil {
 		return nil, fmt.Errorf("pgxpool.ParseConfig: %w", err)
 	}
 
-	poolCfg.MaxConns = set.ConnQuantityMax
-	poolCfg.MinConns = set.ConnQuantityMin
-	poolCfg.HealthCheckPeriod = time.Duration(set.HealthCheckPeriod)
-	poolCfg.MaxConnIdleTime = time.Duration(set.ConnTimeIdleMax)
-	poolCfg.MaxConnLifetime = time.Duration(set.ConnTimeLifetime)
+	poolCfg.MaxConns = ps.ConnQuantityMax
+	poolCfg.MinConns = ps.ConnQuantityMin
+	poolCfg.HealthCheckPeriod = time.Duration(ps.HealthCheckPeriod)
+	poolCfg.MaxConnIdleTime = time.Duration(ps.ConnTimeIdleMax)
+	poolCfg.MaxConnLifetime = time.Duration(ps.ConnTimeLifetime)
 
 	connPool, err := pgxpool.NewWithConfig(ctx, poolCfg)
 	if err != nil {
@@ -48,17 +50,17 @@ func NewPGPoolConn(connString string, set *PoolSettings) (*pgxpool.Pool, error) 
 	return connPool, nil
 }
 
+// ConnectionString for postgres
 func ConnectionString(host, port, user, dbname, sslmode, password string) string {
 	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
 		host, port, user, dbname, sslmode, password,
 	)
 }
 
+// ConnectionStringFromEnv for postgres
 func ConnectionStringFromEnv() string {
 	s := ConnectionSettingsFromENV()
-	return ConnectionString(
-		s.Host, s.Port, s.User, s.DBName, s.SSLMode, s.Password,
-	)
+	return ConnectionString(s.Host, s.Port, s.User, s.DBName, s.SSLMode, s.Password)
 }
 
 func ConnectionSettingsFromENV() *ConnectionSettings {
@@ -72,7 +74,7 @@ func ConnectionSettingsFromENV() *ConnectionSettings {
 
 func PoolSettingsFromENV() *PoolSettings {
 	var s PoolSettings
-	err := envconfig.Process("pool", &s)
+	err := envconfig.Process("pg_pool", &s)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
