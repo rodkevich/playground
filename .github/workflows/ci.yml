@@ -13,6 +13,7 @@ jobs:
         python-version: [ 3.10.9 ]
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
     - name: install npm ci
       run: cd web/simple_app && npm ci
     - name: Set up python ${{ matrix.python-version }}
