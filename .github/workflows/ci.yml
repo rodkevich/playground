@@ -14,5 +14,7 @@ jobs:
         run: source .venv/bin/activate
       - name: Setup python3
         run: pip install -r requirements.txt
+      - name: Install browsers
+        run: playwright install
       - name: Run tests
         run: pytest
