@@ -16,6 +16,5 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install playwright browsers
         run: playwright install
-        working-directory: web/simple-app
       - name: Run tests
         run: pytest
