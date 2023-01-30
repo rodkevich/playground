@@ -16,10 +16,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install browsers
         run: playwright install
-      - name: Pwd
-        run: echo pwd
       - name: Run app
         run: npm run serve
-        working-directory: ./web/simple-app
+        working-directory: web/simple-app
       - name: Run tests
         run: pytest
