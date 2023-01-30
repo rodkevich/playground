@@ -6,15 +6,28 @@ jobs:
   tests_e2e:
     name: Run end-to-end tests
     runs-on: ubuntu-latest
-    steps:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: [ 3.10.4 ]
+      steps:
       - uses: actions/checkout@v3
-      - name: Setup python venv
-        run: python3 -m venv .venv
-      - name: Activate python venv
-        run: source .venv/bin/activate
-      - name: Install python requirements
-        run: pip install -r requirements.txt
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
       - name: Install playwright browsers
         run: playwright install
-      - name: Run tests
-        run: pytest
+#      - name: Run tests
+#        run: pytest
+      - name: Run local server
+        run: |
+          cd web/simple-app/
+          npm run serve
+          sleep 5
+          python -m pytest
