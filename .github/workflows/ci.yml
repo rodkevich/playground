@@ -25,7 +25,8 @@ jobs:
       run: playwright install
     - name: Run local server
       run: |
-        cd web/simple-app
         npm run serve
         sleep 5
+        cd ../..
         python -m pytest
+      working-directory: web/simple-app
