@@ -8,16 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup python1
+      - name: Setup python venv
         run: python3 -m venv .venv
-      - name: Setup python2
+      - name: Activate python venv
         run: source .venv/bin/activate
-      - name: Setup python3
+      - name: Install python requirements
         run: pip install -r requirements.txt
-      - name: Install browsers
+      - name: Install playwright browsers
         run: playwright install
-      - name: Run app
-        run: npm run serve
         working-directory: web/simple-app
       - name: Run tests
         run: pytest
