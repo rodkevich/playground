@@ -19,6 +19,7 @@ jobs:
       - name: Pwd
         run: echo pwd
       - name: Run app
-        run: cd web/simple-app && npm run serve
+        run: npm run serve
+        working-directory: ./web/simple-app
       - name: Run tests
         run: pytest
