@@ -17,6 +17,6 @@ jobs:
       - name: Install browsers
         run: playwright install
       - name: Run app
-        run: cd web/simple-app && npm run serve
+        run: cd ./web/simple-app && npm run serve
       - name: Run tests
         run: pytest
