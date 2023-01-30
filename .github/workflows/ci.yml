@@ -22,7 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: install npm ci
-      run: cd web/simple-app && npm ci
+      run: cd web/simple_app && npm ci
     - name: Install playwright browsers
       run: playwright install
     - name: Run local server
@@ -31,4 +31,4 @@ jobs:
         sleep 5
         cd ../..
         python -m pytest
-      working-directory: web/simple-app
+      working-directory: web/simple_app
