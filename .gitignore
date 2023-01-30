@@ -18,3 +18,4 @@
 /.pytest_cache/
 /.playwright-screenshots/
 /vendor/
+**/__pycache__/
