@@ -8,5 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Setup python1
+        run: make python-env-create
+      - name: Setup python3
+        run: make python-env-activate
+      - name: Setup python3
+        run: make python-env-install
       - name: Run tests
         run: pytest
