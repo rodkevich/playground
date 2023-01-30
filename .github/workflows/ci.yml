@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup python1
-        run: make python-env-create
+        run: python3 -m venv .venv
       - name: Setup python3
-        run: make python-env-activate
+        run: source .venv/bin/activate
       - name: Setup python3
-        run: make python-env-install
+        run: pip install -r requirements.txt
       - name: Run tests
         run: pytest
