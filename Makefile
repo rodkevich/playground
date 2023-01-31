@@ -35,7 +35,7 @@ pw-install:
 	playwright install
 
 web-run-simple_app:
-	cd web/simple-app&&npm run serve --fix
+	cd web/simple-app&&npm run serve
 
 vue-create_app:
 	vue create

@@ -1,18 +1,68 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
+
+  tests_unit:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web/simple-app
+      - name: Run tests
+        run: npm run test:unit
+        working-directory: web/simple-app
+
   tests_e2e:
     name: Run end-to-end tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup python1
-        run: python3 -m venv .venv
-      - name: Setup python3
-        run: source .venv/bin/activate
-      - name: Setup python3
-        run: pip install -r requirements.txt
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web/simple-app
       - name: Run tests
-        run: pytest
+        run: npm run test:e2eHeadless
+        working-directory: web/simple-app
+
+#jobs:
+#  tests_e2e:
+#    name: Run end-to-end tests
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      max-parallel: 5
+#      matrix:
+#        python-version: [ 3.10.9 ]
+#    steps:
+#    - uses: actions/checkout@v3
+#    - uses: actions/setup-node@v3
+#    - name: install npm ci
+#      run: cd web/simple_app && npm ci
+#    - name: Set up python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v1
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -r requirements.txt
+#    - name: Install playwright browsers
+#      run: playwright install
+#    - name: Run local server
+#      run: |
+#        npm run serve
+#        sleep 5
+#        cd ../..
+#        python -m pytest
+#      working-directory: web/simple_app
