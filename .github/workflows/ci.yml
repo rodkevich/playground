@@ -49,9 +49,14 @@ jobs:
           pip install -r requirements.txt
       - name: Install playwright browsers
         run: playwright install
+      - name: Build
+        run: npm run build
       - name: Run local server
         run: |
-          npm run serve &&  cd ../.. && python -m pytest
+          npm run serve
+          sleep 5
+          cd ../..
+          python -m pytest
         working-directory: web/simple-app
       - name: test it
         run: python -m pytest
