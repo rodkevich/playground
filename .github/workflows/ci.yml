@@ -12,6 +12,11 @@ jobs:
   tests_unit:
     name: Run unit tests
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: [ 3.10.9 ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -34,6 +39,23 @@ jobs:
       - name: Run tests
         run: npm run test:e2eHeadless
         working-directory: web/simple-app
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Install playwright browsers
+        run: playwright install
+      - name: Run local server
+        run: |
+          npm run serve
+        working-directory: web/simple_app
+      - name: test it
+        run: python -m pytest
+
 
 #jobs:
 #  tests_e2e:
