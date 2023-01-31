@@ -51,11 +51,12 @@ jobs:
         run: playwright install
       - name: Build
         run: npm run build
+        working-directory: web/simple-app
       - name: Run local server
         run: |
-          npm run serve
-          sleep 5
-          cd ../..
+          npm run serve &&
+          sleep 5 &&
+          cd ../.. &&
           python -m pytest
         working-directory: web/simple-app
       - name: test it
