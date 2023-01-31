@@ -40,3 +40,6 @@ vue-create_app:
 
 cypress-app-run-dev:
 	cd web/cypress-app && npm run dev
+
+cypress-test-open:
+	cd web/cypress-app && npx cypress open
