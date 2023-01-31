@@ -51,7 +51,7 @@ jobs:
         run: playwright install
       - name: Run local server
         run: |
-          npm run serve
+          npm run serve &&  cd ../.. && python -m pytest
         working-directory: web/simple-app
       - name: test it
         run: python -m pytest
