@@ -54,15 +54,16 @@ jobs:
           pip install -r requirements.txt
       - name: Install playwright browsers
         run: playwright install
-      - name: Build
-        run: npm run build
+#      - name: Build
+#        run: npm run build
         working-directory: web/simple-app
       - name: Run local server
         run: |
           npm run serve &&
           sleep 5 &&
-          cd ../.. &&
+          cd ../../ &&
           python -m pytest
+        shell: bash
         working-directory: web/simple-app
       - name: test it
         run: python -m pytest
