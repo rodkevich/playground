@@ -61,8 +61,7 @@ jobs:
         run: |
           npm run serve &&
           sleep 5 &&
-          cd ../../ &&
-          python -m pytest
+          curl http://localhost:8080 -I
         shell: bash
         working-directory: web/simple-app
       - name: test it
