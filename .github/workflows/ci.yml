@@ -47,13 +47,14 @@ jobs:
         run: npm run test:e2eHeadless
         working-directory: web/simple-app
       - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Install playwright browsers
         run: playwright install
 #      - name: Build
@@ -62,7 +63,7 @@ jobs:
       - name: Run local server
         run: |
           npm run serve &&
-          sleep 5 &&
+          sleep 15 &&
           curl http://localhost:8080 -I
         shell: bash
         working-directory: web/simple-app
