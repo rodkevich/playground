@@ -26,8 +26,6 @@ python-env-install:
 python-env-activate:
 	source .venv/bin/activate
 
-
-
 python-requirements-freeze:
 	pip freeze > requirements.txt
 
@@ -39,3 +37,6 @@ web-run-simple_app:
 
 vue-create_app:
 	vue create
+
+cypress-app-run-dev:
+	cd web/cypress-app && npm run dev
