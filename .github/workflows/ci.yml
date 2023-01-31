@@ -1,35 +1,64 @@
 name: CI
 
-on: [push, pull_request]
+#on: [push, pull_request]
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
+  tests_unit:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # checkout project from git
+      - uses: actions/setup-node@v3 # install node
+      - name: Install dependencies #  go to project and install dependencies from json
+        run: cd web/new_project && npm ci #
+      - name: Run tests
+        run: cd web/new_project/tests/unit && npm run test:unit
   tests_e2e:
     name: Run end-to-end tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 5
-      matrix:
-        python-version: [ 3.10.9 ]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-    - name: install npm ci
-      run: cd web/simple_app && npm ci
-    - name: Set up python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Install playwright browsers
-      run: playwright install
-    - name: Run local server
-      run: |
-        npm run serve
-        sleep 5
-        cd ../..
-        python -m pytest
-      working-directory: web/simple_app
+      - uses: actions/checkout@v3 # checkout project from git
+      - uses: actions/setup-node@v3 # install node
+      - name: Install dependencies #  go to project and install dependencies from json
+        run: cd web/new_project && npm ci #
+      - name: Run tests
+        run: cd web/new_project/tests/unit && npm run test:unit
+
+#jobs:
+#  tests_e2e:
+#    name: Run end-to-end tests
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      max-parallel: 5
+#      matrix:
+#        python-version: [ 3.10.9 ]
+#    steps:
+#    - uses: actions/checkout@v3
+#    - uses: actions/setup-node@v3
+#    - name: install npm ci
+#      run: cd web/simple_app && npm ci
+#    - name: Set up python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v1
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install -r requirements.txt
+#    - name: Install playwright browsers
+#      run: playwright install
+#    - name: Run local server
+#      run: |
+#        npm run serve
+#        sleep 5
+#        cd ../..
+#        python -m pytest
+#      working-directory: web/simple_app

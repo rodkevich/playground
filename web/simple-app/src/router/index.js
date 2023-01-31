@@ -8,11 +8,6 @@ const routes = [
     component: HomeView,
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue'),
-  },
-  {
     path: '/about',
     name: 'about',
     // route level code-splitting
