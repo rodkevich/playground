@@ -14,22 +14,24 @@ jobs:
     name: Run unit tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3 # checkout project from git
-      - uses: actions/setup-node@v3 # install node
-      - name: Install dependencies #  go to project and install dependencies from json
-        run: cd web/new_project && npm ci #
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web/simple-app
       - name: Run tests
         run: cd web/new_project/tests/unit && npm run test:unit
   tests_e2e:
     name: Run end-to-end tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3 # checkout project from git
-      - uses: actions/setup-node@v3 # install node
-      - name: Install dependencies #  go to project and install dependencies from json
-        run: cd web/new_project && npm ci #
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: npm ci
+        working-directory: web/simple-app
       - name: Run tests
-        run: cd web/new_project/tests/unit && npm run test:unit
+        run: cd web/new_project/tests/unit && npm run test:e2eHeadless
 
 #jobs:
 #  tests_e2e:
