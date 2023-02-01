@@ -30,8 +30,10 @@ export default class TodoApp extends Component {
     // send item via axios http client
     saveTodoWithAxiosClient(newTODO)
         .then(({data}) => this.setState({
-          todos: this.state.todos.concat(data)
+          todos: this.state.todos.concat(data),
+          currentTODO: ''
         }))
+        .catch(()=>this.setState({error:true}))
   }
 
   render () {
@@ -40,9 +42,12 @@ export default class TodoApp extends Component {
         <div>
           <header className="header">
             <h1>todos</h1>
+            {this.state.error ? <span className='error'>Oh no!</span> : null}
+
             <TodoForm
                 currentTODO={this.state.currentTODO}
-                handleTODOSubmit={this.handleTODOSubmit} // add handlers
+                // add handlers ...
+                handleTODOSubmit={this.handleTODOSubmit}
                 handleNewTODOChange={this.handleNewTODOChange}
             />
           </header>
