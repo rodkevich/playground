@@ -2,7 +2,7 @@ from playwright.sync_api import Page
 
 
 class HomePage:
-    title: str = 'test-app'
+    title: str = 'simple-app'
     about_page_link: str = '#app > nav:nth-child(1) > a:nth-child(2)'
 
     def __init__(self, page: Page):

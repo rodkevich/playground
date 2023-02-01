@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom'
 import TodoForm from './TodoForm'
 import TodoList from './TodoList'
 import Footer from './Footer'
-import {saveTodoWithAxiosClient} from "../lib/service";
+import {saveTodoWithAxiosClient, loadTODOs} from "../lib/service";
 
 export default class TodoApp extends Component {
   constructor(props) {
@@ -30,8 +30,15 @@ export default class TodoApp extends Component {
     // send item via axios http client
     saveTodoWithAxiosClient(newTODO)
         .then(({data}) => this.setState({
-          todos: this.state.todos.concat(data)
+          todos: this.state.todos.concat(data),
+          currentTODO: ''
         }))
+        .catch(()=>this.setState({error:true}))
+  }
+
+  componentDidMount() {
+    loadTODOs()
+        .then(({data})=>this.setState({todos:data}))
   }
 
   render () {
@@ -40,9 +47,12 @@ export default class TodoApp extends Component {
         <div>
           <header className="header">
             <h1>todos</h1>
+            {this.state.error ? <span className='error'>Oh no!</span> : null}
+
             <TodoForm
                 currentTODO={this.state.currentTODO}
-                handleTODOSubmit={this.handleTODOSubmit} // add handlers
+                // add handlers ...
+                handleTODOSubmit={this.handleTODOSubmit}
                 handleNewTODOChange={this.handleNewTODOChange}
             />
           </header>

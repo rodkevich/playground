@@ -14,7 +14,7 @@ def test_home_page_1(base_url, page):
     np.validate_text()
 
 
-# scenarios("about_page.feature")  # must()
+scenarios("about_page.feature")  # must()
 
 
 @scenario('about_page.feature', 'User can navigate about page from homepage')

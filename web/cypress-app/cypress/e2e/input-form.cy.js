@@ -19,13 +19,14 @@ describe('Input form', () =>{
 
     // group test context
     context('Form submission', () => {
-        it.only('Adds a new TODO on submit', () => {
+        // Adds a new item on submit
+        it('Adds a new TODO on submit', () => {
             // https://docs.cypress.io/api/commands/intercept
             // cy.server was removed in 12 ver
+            const itemText = 'Learn cypress';
             cy.intercept('POST', '/api/todos', (req) => {
-                expect(req.body.name === 'L1earn cypress')
                 const response = {
-                            name: 'Learn cypress',
+                            name: itemText,
                             id:1,
                             isComplete: false
                         }
@@ -34,8 +35,35 @@ describe('Input form', () =>{
             })
 
             cy.get('.new-todo')
-                .type('Learn cypress')
+                .type(itemText)
                 .type('{enter}')
+                .should('have.value', '')
+            cy.get('.todo-list li')
+                .should('have.length', 1)
+                .and('contain', itemText)
+
         })
+
+        //Show ERROR message if submission failed
+        it('Show ERROR message if submission failed', () =>{
+            cy.intercept('POST', '/api/todos', (req) => {
+               const response = {
+                    statusCode: 500,
+                    body: '505 Internal ERROR',
+                }
+               req.reply(response)
+               })
+
+            cy.get('.new-todo')
+                .type('test{enter}')
+
+            cy.get('todo-list li')
+                .should('not.exist')
+
+            cy.get('.error')
+                .should('be.visible')
+        })
+
     })
+
 })
