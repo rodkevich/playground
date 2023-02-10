@@ -1,3 +1,12 @@
+.PHONY: test
+test:
+	go test -race ./...
+
+.PHONY: gofmt
+gofmt:
+	$(eval FMT_LOG := $(shell mktemp -t gofmt.XXXXX))
+	gofmt -e -s -l $(GO_FILES) > $(FMT_LOG) || true
+	@[ ! -s "$(FMT_LOG)" ] || (echo "gofmt failed:" && cat $(FMT_LOG) && false)
 
 go-requirements-reset:
 	git checkout -- go.mod
@@ -26,8 +35,6 @@ python-env-install:
 python-env-activate:
 	source .venv/bin/activate
 
-
-
 python-requirements-freeze:
 	pip freeze > requirements.txt
 
@@ -39,3 +46,9 @@ web-run-simple_app:
 
 vue-create_app:
 	vue create
+
+cypress-app-run-dev:
+	cd web/cypress-app && npm run dev
+
+cypress-test-open:
+	cd web/cypress-app && npx cypress open
